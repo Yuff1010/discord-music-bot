@@ -1,0 +1,31 @@
+{
+  "name": "discord-music-bot",
+  "version": "0.1.0",
+  "description": "A self-hostable Discord music bot built with discord.js and discord-player",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "register": "node src/handlers/register.js",
+    "lint": "eslint src/**/*.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "discord",
+    "music",
+    "bot"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discord-player/extractor": "^4.5.1",
+    "@discordjs/opus": "^0.10.0",
+    "@discordjs/voice": "^0.19.2",
+    "discord-player": "^6.7.1",
+    "discord.js": "^14.26.3",
+    "dotenv": "^17.4.2",
+    "ffmpeg-static": "^5.3.0",
+    "pino": "^10.3.1"
+  }
+}
