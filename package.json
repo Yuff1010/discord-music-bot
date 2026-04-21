@@ -8,8 +8,9 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "register": "node src/handlers/register.js",
+    "docs:check": "node scripts/validate-docs.mjs",
     "lint": "eslint src/**/*.js",
-    "test": "node --test"
+    "test": "node --experimental-test-isolation=none --test"
   },
   "keywords": [
     "discord",
