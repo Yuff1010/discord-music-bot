@@ -20,6 +20,7 @@ Last updated: 2026-04-21
 - 新增 `npm run docs:check` 文档校验 harness
 - 为 `formatDuration` 新增基础单元测试，避免 `npm test` 为空跑
 - 把“每个切片先测试、再 commit / push、再由 CI 验证”的规则写入仓库文档
+- 发现并修复 CI 的 Node 版本不一致问题，统一到 Node 22
 
 ## In Progress
 

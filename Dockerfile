@@ -1,5 +1,5 @@
 # ── Stage 1: builder ──────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Build deps for native modules (@discordjs/opus)
 RUN apk add --no-cache python3 make g++ ffmpeg
@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 # ── Stage 2: runner ───────────────────────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 RUN apk add --no-cache ffmpeg
 

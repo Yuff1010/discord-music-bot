@@ -22,6 +22,8 @@
 
 ## 快速开始
 
+前置要求：`Node.js 22 LTS`
+
 1. 安装依赖：`npm ci`
 2. 复制环境变量模板：`Copy-Item .env.example .env`
 3. 在 `.env` 中填写 `DISCORD_TOKEN`、`CLIENT_ID`、可选的 `GUILD_ID`
