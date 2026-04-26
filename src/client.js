@@ -1,8 +1,6 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import { Player } from 'discord-player';
-import extractors from '@discord-player/extractor';
-
-const { YoutubeExtractor } = extractors;
+import { YoutubeiExtractor } from 'discord-player-youtubei';
 
 export const client = new Client({
   intents: [
@@ -18,4 +16,6 @@ export const player = new Player(client, {
 
 client.player = player;
 
-await player.extractors.register(YoutubeExtractor, {});
+await player.extractors.register(YoutubeiExtractor, {
+  disablePlayer: true,
+});

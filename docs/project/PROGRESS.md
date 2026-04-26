@@ -25,7 +25,8 @@ Last updated: 2026-04-26
 - 新增 `src/utils/music.js`，统一曲目信息与队列展示格式
 - 新增 `src/events/player/` 基础事件处理：开始播放、加入队列、队列结束、频道无人、断开连接、播放错误
 - 为音乐队列格式化逻辑新增单元测试
-- 新增 `@distube/ytdl-core`，满足当前 YouTube extractor 的流创建依赖
+- 将 YouTube 播放 extractor 切换到 `discord-player-youtubei`，规避旧 scraping-based extractor 在 smoke test 中无法提取 playable formats 的问题
+- 将 Discord ready 事件名更新为 `clientReady`，消除 v15 迁移前的 deprecation warning
 
 ## In Progress
 
@@ -44,6 +45,7 @@ Last updated: 2026-04-26
 
 - 音乐播放路径已实现但尚未在真实 Discord 语音环境中验证
 - Discord 相关命令依赖真实凭据，不能在无凭据环境下做端到端验证
+- YouTube 上游仍可能限制非官方提取链路，后续 smoke test 仍需覆盖多首公开视频
 - 当前部分中文消息文本存在编码异常，后续需要统一修复
 - `lint` 脚本存在，但仓库未配置 ESLint 依赖和规则，暂时不能作为真实质量门禁
 - CD 依赖 GitHub secrets 中存在 Docker Hub 凭据，否则 tag 流水线无法完成镜像推送

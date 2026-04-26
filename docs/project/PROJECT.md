@@ -113,7 +113,8 @@ Status: planned
 - Discord Developer Portal 中的 bot token 与 application id
 - 目标服务器内的 bot 安装与语音权限
 - `discord-player` 与提取器能力
-- `@distube/ytdl-core` 用于当前 YouTube extractor 的流创建
+- `discord-player-youtubei` 用于当前 YouTube 搜索和流创建
+- `youtube-dl-exec` 是当前 `discord-player-youtubei` 版本的运行时导入依赖
 - `ffmpeg` 运行环境
 
 ## Risks And Mitigations
