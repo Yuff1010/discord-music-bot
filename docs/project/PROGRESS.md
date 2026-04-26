@@ -1,12 +1,12 @@
 # Progress
 
-Last updated: 2026-04-21
+Last updated: 2026-04-26
 
 ## Current Snapshot
 
-仓库处于“基础工程已搭好，但音乐 MVP 还未开始实现”的阶段。
+仓库已经从“基础工程已搭好”推进到 M1 Core Music MVP 的第一轮实现阶段。
 
-今天完成的主线工作是把仓库从“只有代码骨架”推进到“有可执行文档系统和最小 harness”的状态，这样后续实现功能时可以直接围绕 PRD、项目计划和 active execution plan 迭代。
+当前已落地 `/play`、`/skip`、`/stop`、`/queue` 四个核心音乐命令，新增基础 player event 反馈，并为队列展示与曲目信息格式化补充了单元测试。由于 Discord 语音播放依赖真实 bot token、guild、频道权限和上游音源，本地验证目前覆盖模块导入、纯逻辑测试和文档 harness，端到端语音路径仍需要在真实 Discord 环境中 smoke test。
 
 ## Completed
 
@@ -21,30 +21,36 @@ Last updated: 2026-04-21
 - 为 `formatDuration` 新增基础单元测试，避免 `npm test` 为空跑
 - 把“每个切片先测试、再 commit / push、再由 CI 验证”的规则写入仓库文档
 - 发现并修复 CI 的 Node 版本不一致问题，统一到 Node 22
+- 新增 `/play`、`/skip`、`/stop`、`/queue` 核心音乐命令
+- 新增 `src/utils/music.js`，统一曲目信息与队列展示格式
+- 新增 `src/events/player/` 基础事件处理：开始播放、加入队列、队列结束、频道无人、断开连接、播放错误
+- 为音乐队列格式化逻辑新增单元测试
+- 新增 `@distube/ytdl-core`，满足当前 YouTube extractor 的流创建依赖
 
 ## In Progress
 
-- 建立以 `docs/` 为 source of truth 的协作方式
-- 为 MVP 音乐命令准备任务拆解和验收标准
+- 在真实 Discord 环境中验证 M1 播放路径
+- 根据 smoke test 结果修正播放、权限和事件反馈边界
 
 ## Next Up
 
-- 实现 `/play`
-- 实现 `/skip`
-- 实现 `/stop`
-- 实现 `/queue`
-- 新建 `src/events/player/` 事件处理模块
-- 为语音校验和文档 harness 补更多测试
+- 使用真实 Discord 凭据运行 `npm run register`
+- 启动 bot 后验证 `/play` 搜索与播放
+- 验证 `/skip`、`/stop`、`/queue` 在同频道和跨频道场景下的反馈
+- 视 smoke test 结果补命令级测试或调整 `discord-player` 调用细节
+- 修复当前用户可见中文字符串的编码异常
 
 ## Risks / Blockers
 
-- 当前仓库还没有可用的音乐播放路径
+- 音乐播放路径已实现但尚未在真实 Discord 语音环境中验证
 - Discord 相关命令依赖真实凭据，不能在无凭据环境下做端到端验证
 - 当前部分中文消息文本存在编码异常，后续需要统一修复
 - `lint` 脚本存在，但仓库未配置 ESLint 依赖和规则，暂时不能作为真实质量门禁
 - CD 依赖 GitHub secrets 中存在 Docker Hub 凭据，否则 tag 流水线无法完成镜像推送
+- `npm ci` 后 `npm audit` 报告 9 个依赖漏洞，需要单独评估依赖升级风险
 
 ## Decision Log
 
 - 2026-04-21: 采用 `docs/` 作为项目、产品和执行计划的系统记录，而不是把背景知识放在聊天历史里。
 - 2026-04-21: 文档 harness 先从“关键文件存在 + 核心交叉链接 + 状态字段存在”这一级别开始，后续再增强。
+- 2026-04-26: M1 第一轮实现先覆盖核心命令、player event 反馈和队列格式化单测；Discord 端到端语音验证作为下一步 smoke test。

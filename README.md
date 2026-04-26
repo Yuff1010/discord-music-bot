@@ -2,7 +2,7 @@
 
 一个可自托管的 Discord 音乐机器人仓库，基于 `discord.js v14` 和 `discord-player v6`。
 
-当前代码库已经具备运行骨架、Docker 打包、CI 和斜杠命令注册能力，但音乐播放核心能力还没有完成。这个仓库现在采用文档先行的方式推进，先把产品需求、项目计划、进度跟踪和 harness engineering 约束沉淀到仓库里，再按执行计划逐步补齐 `/play`、`/skip`、`/stop`、`/queue` 等命令。
+当前代码库已经具备运行骨架、Docker 打包、CI、斜杠命令注册能力和 MVP 音乐命令的第一轮实现。这个仓库采用文档先行的方式推进，把产品需求、项目计划、进度跟踪和 harness engineering 约束沉淀到仓库里，再按执行计划逐步验证和完善 `/play`、`/skip`、`/stop`、`/queue` 等命令。
 
 ## 文档入口
 
@@ -16,9 +16,9 @@
 
 ## 当前状态
 
-- 已完成：Discord 客户端初始化、`discord-player` 初始化、命令/事件动态加载、`/ping` 示例命令、命令注册脚本、Dockerfile、`docker-compose.yml`、GitHub Actions 基础 CI/CD。
-- 未完成：核心音乐命令、播放器事件消息、播放队列可视化、自动离开策略验证、端到端测试。
-- 当前优先级：先完成文档与 harness，再按执行计划交付 MVP 音乐能力。
+- 已完成：Discord 客户端初始化、`discord-player` 初始化、命令/事件动态加载、`/ping`、`/play`、`/skip`、`/stop`、`/queue`、命令注册脚本、基础播放器事件反馈、Dockerfile、`docker-compose.yml`、GitHub Actions 基础 CI/CD。
+- 未完成：真实 Discord 语音环境 smoke test、自动离开策略验证、端到端测试、中文文案编码统一检查。
+- 当前优先级：在真实 Discord 环境中注册并验证 MVP 音乐命令，根据结果补边界处理和测试。
 
 ## 快速开始
 

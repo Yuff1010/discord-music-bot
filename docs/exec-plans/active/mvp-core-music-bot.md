@@ -1,7 +1,7 @@
 # Execution Plan: MVP Core Music Bot
 
 Status: active
-Last updated: 2026-04-21
+Last updated: 2026-04-26
 
 ## Goal
 
@@ -45,13 +45,14 @@ Out of scope:
 - [x] 建立 README、PRD、PROJECT、PROGRESS、HARNESS、AGENTS
 - [x] 为文档添加机械校验入口
 - [x] 补一个基础单测，确保 `npm test` 不再是空跑
-- [ ] 设计命令模块接口和共用校验流程
-- [ ] 实现 `/play`
-- [ ] 实现 `/skip`
-- [ ] 实现 `/stop`
-- [ ] 实现 `/queue`
-- [ ] 实现 `src/events/player/` 下的基础事件
-- [ ] 补最小测试与 smoke verification
+- [x] 设计命令模块接口和共用校验流程
+- [x] 实现 `/play`
+- [x] 实现 `/skip`
+- [x] 实现 `/stop`
+- [x] 实现 `/queue`
+- [x] 实现 `src/events/player/` 下的基础事件
+- [x] 补最小测试
+- [ ] 在真实 Discord 环境中完成 smoke verification
 - [ ] 修复当前用户可见中文字符串的编码问题
 
 ## Implementation Notes
@@ -66,3 +67,4 @@ Out of scope:
 
 - 2026-04-21: 文档和 harness 先于音乐命令落地，避免后续实现失去上下文约束。
 - 2026-04-21: 继续沿用 `discord-player`，不手写底层语音播放管线。
+- 2026-04-26: 核心命令先复用现有 `validateVoice`、`validateBotInChannel`、`validateSameChannel`，队列展示抽到 `src/utils/music.js` 以便单测覆盖。

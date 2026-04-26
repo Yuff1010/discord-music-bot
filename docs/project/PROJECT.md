@@ -1,6 +1,6 @@
 # Project Plan
 
-Last updated: 2026-04-21
+Last updated: 2026-04-26
 Project phase: foundation to MVP
 
 ## Current Repository Snapshot
@@ -13,15 +13,20 @@ Project phase: foundation to MVP
 - `src/handlers/events.js`: 自动加载 `src/events/*.js`
 - `src/handlers/playerEvents.js`: 预留 `src/events/player/` 的动态加载
 - `src/commands/ping.js`: 示例 slash command
+- `src/commands/play.js`: 搜索并播放音乐或加入队列
+- `src/commands/skip.js`: 跳过当前曲目
+- `src/commands/stop.js`: 停止播放并清空队列
+- `src/commands/queue.js`: 展示当前播放与待播队列
+- `src/events/player/`: 基础播放器事件反馈
+- `src/utils/music.js`: 曲目信息和队列展示格式化
 - `.github/workflows/`: CI 和 Docker deploy 骨架
 - `Dockerfile` 与 `docker-compose.yml`: 自托管部署入口
 
 当前主要缺口：
 
-- 没有任何音乐命令
-- `src/events/player/` 目录还未真正落地
-- 没有围绕播放流程的测试
-- 没有项目级文档和可执行计划
+- 音乐命令尚未在真实 Discord 语音环境中 smoke test
+- 还缺少命令执行层面的 mocks 或集成测试
+- 当前部分中文文案仍需统一检查编码和可读性
 
 ## Target Architecture
 
@@ -58,6 +63,7 @@ Status: done
 - 补齐基础测试
 
 Status: next major delivery
+Current state: core commands implemented, pending Discord smoke verification
 
 ### M2 Usability And Reliability
 
@@ -107,6 +113,7 @@ Status: planned
 - Discord Developer Portal 中的 bot token 与 application id
 - 目标服务器内的 bot 安装与语音权限
 - `discord-player` 与提取器能力
+- `@distube/ytdl-core` 用于当前 YouTube extractor 的流创建
 - `ffmpeg` 运行环境
 
 ## Risks And Mitigations
