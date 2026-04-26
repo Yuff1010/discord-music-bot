@@ -16,6 +16,10 @@ export const player = new Player(client, {
 
 client.player = player;
 
+player.on('error', (error) => {
+  console.error('[playerError]', error);
+});
+
 await player.extractors.register(YoutubeiExtractor, {
   disablePlayer: true,
 });

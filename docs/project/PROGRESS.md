@@ -27,6 +27,7 @@ Last updated: 2026-04-26
 - 为音乐队列格式化逻辑新增单元测试
 - 将 YouTube 播放 extractor 切换到 `discord-player-youtubei`，规避旧 scraping-based extractor 在 smoke test 中无法提取 playable formats 的问题
 - 将 Discord ready 事件名更新为 `clientReady`，消除 v15 迁移前的 deprecation warning
+- 补齐 `discord-player` 全局 `error` 和队列级 `error` 监听，避免 smoke test 中出现未处理事件 warning
 
 ## In Progress
 
