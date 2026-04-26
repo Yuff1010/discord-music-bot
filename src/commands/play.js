@@ -3,6 +3,8 @@ import { errorEmbed, successEmbed } from '../utils/embed.js';
 import { formatTrackLine } from '../utils/music.js';
 import { validateVoice } from '../utils/validate.js';
 
+const PLAY_START_TIMEOUT_MS = 8_000;
+
 export const data = new SlashCommandBuilder()
   .setName('play')
   .setDescription('搜索并播放音乐。')
@@ -34,7 +36,8 @@ export async function execute(interaction) {
     return;
   }
 
-  const { track, queue } = await interaction.client.player.play(validation.voiceChannel, searchResult, {
+  const requestedTrack = searchResult.tracks[0];
+  const playPromise = interaction.client.player.play(validation.voiceChannel, searchResult, {
     requestedBy: interaction.user,
     nodeOptions: {
       metadata: {
@@ -45,12 +48,40 @@ export async function execute(interaction) {
     },
   });
 
-  queue.setMetadata({
-    channel: interaction.channel,
-    requestedBy: interaction.user,
-  });
+  try {
+    const result = await Promise.race([
+      playPromise,
+      new Promise((resolve) => {
+        setTimeout(() => resolve(null), PLAY_START_TIMEOUT_MS);
+      }),
+    ]);
 
-  await interaction.editReply({
-    embeds: [successEmbed(`已加入队列：${formatTrackLine(track)}`)],
-  });
+    if (!result) {
+      await interaction.editReply({
+        embeds: [successEmbed(`已找到曲目，正在连接并准备播放：${formatTrackLine(requestedTrack)}`)],
+      });
+
+      playPromise.catch(async (error) => {
+        console.error('[play] Delayed playback failed:', error);
+        await interaction.channel?.send({
+          embeds: [errorEmbed('播放启动失败，请稍后重试或换一首歌。')],
+        });
+      });
+      return;
+    }
+
+    result.queue.setMetadata({
+      channel: interaction.channel,
+      requestedBy: interaction.user,
+    });
+
+    await interaction.editReply({
+      embeds: [successEmbed(`已加入队列：${formatTrackLine(result.track)}`)],
+    });
+  } catch (error) {
+    console.error('[play] Playback failed:', error);
+    await interaction.editReply({
+      embeds: [errorEmbed('播放启动失败，请稍后重试或换一首歌。')],
+    });
+  }
 }
