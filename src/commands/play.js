@@ -1,9 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { QueryType } from 'discord-player';
 import { errorEmbed, successEmbed } from '../utils/embed.js';
 import { formatTrackLine } from '../utils/music.js';
 import { validateVoice } from '../utils/validate.js';
-
-const PLAY_START_TIMEOUT_MS = 8_000;
 
 export const data = new SlashCommandBuilder()
   .setName('play')
@@ -29,6 +28,7 @@ export async function execute(interaction) {
 
   const searchResult = await interaction.client.player.search(query, {
     requestedBy: interaction.user,
+    searchEngine: QueryType.AUTO,
   });
 
   if (!searchResult || searchResult.tracks.length === 0) {
@@ -36,51 +36,41 @@ export async function execute(interaction) {
     return;
   }
 
-  const requestedTrack = searchResult.tracks[0];
-  const playPromise = interaction.client.player.play(validation.voiceChannel, searchResult, {
-    requestedBy: interaction.user,
-    nodeOptions: {
-      metadata: {
-        channel: interaction.channel,
-        requestedBy: interaction.user,
-      },
-      selfDeaf: true,
-    },
-  });
-
-  try {
-    const result = await Promise.race([
-      playPromise,
-      new Promise((resolve) => {
-        setTimeout(() => resolve(null), PLAY_START_TIMEOUT_MS);
-      }),
-    ]);
-
-    if (!result) {
-      await interaction.editReply({
-        embeds: [successEmbed(`已找到曲目，正在连接并准备播放：${formatTrackLine(requestedTrack)}`)],
-      });
-
-      playPromise.catch(async (error) => {
-        console.error('[play] Delayed playback failed:', error);
-        await interaction.channel?.send({
-          embeds: [errorEmbed('播放启动失败，请稍后重试或换一首歌。')],
-        });
-      });
-      return;
-    }
-
-    result.queue.setMetadata({
+  const queue = interaction.client.player.nodes.create(interaction.guild, {
+    metadata: {
       channel: interaction.channel,
       requestedBy: interaction.user,
-    });
+    },
+    selfDeaf: true,
+  });
+  queue.setMetadata({
+    channel: interaction.channel,
+    requestedBy: interaction.user,
+  });
 
-    await interaction.editReply({
-      embeds: [successEmbed(`已加入队列：${formatTrackLine(result.track)}`)],
-    });
+  await interaction.editReply({
+    embeds: [successEmbed(`已找到曲目，正在连接并准备播放：${formatTrackLine(searchResult.tracks[0])}`)],
+  });
+
+  const requestedTracks = searchResult.playlist ?? searchResult.tracks[0];
+  queue.addTrack(requestedTracks);
+
+  void startPlayback(queue, validation.voiceChannel, interaction.channel);
+}
+
+async function startPlayback(queue, voiceChannel, textChannel) {
+  try {
+    if (!queue.connection) {
+      await queue.connect(voiceChannel);
+    }
+
+    if (!queue.isPlaying()) {
+      await queue.node.play();
+    }
   } catch (error) {
-    console.error('[play] Playback failed:', error);
-    await interaction.editReply({
+    console.error('[play] Playback startup failed:', error);
+    queue.delete();
+    await textChannel?.send({
       embeds: [errorEmbed('播放启动失败，请稍后重试或换一首歌。')],
     });
   }

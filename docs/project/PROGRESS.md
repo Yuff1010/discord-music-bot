@@ -29,6 +29,7 @@ Last updated: 2026-04-26
 - 将 Discord ready 事件名更新为 `clientReady`，消除 v15 迁移前的 deprecation warning
 - 补齐 `discord-player` 全局 `error` 和队列级 `error` 监听，避免 smoke test 中出现未处理事件 warning
 - 为 `/play` 增加播放启动超时兜底，避免语音连接或取流阶段卡住时 slash command 一直停留在 thinking 状态
+- 参考 Gabriel Tanner 教程的播放流程，将 `/play` 改为 `search -> create queue -> reply -> add track -> connect/play`，避免 interaction 等待完整播放启动
 
 ## In Progress
 
